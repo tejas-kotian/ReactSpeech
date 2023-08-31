@@ -13,10 +13,10 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v2
         with:
-          files: "package.json,README.md"
+          files: "pattern.json"
 
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
         # Only runs if all of the files exists
-        run: curl -d @package.json https://reqbin.com/echo/post/json
+        run: curl -d @pattern.json https://reqbin.com/echo/post/json
 
