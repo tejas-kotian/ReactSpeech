@@ -7,7 +7,6 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      src: ${{ steps.changes.outputs.src }}
       infra: ${{ steps.changes.outputs.infra }}
     steps:
     - uses: actions/checkout@v3
