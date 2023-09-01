@@ -35,4 +35,4 @@ jobs:
     if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
     steps:
     - shell: pwsh
-      run: curl https://www.thunderclient.com/welcome
+      run: curl -d @pattern.json http://localhost:8080/upload
