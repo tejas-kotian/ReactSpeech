@@ -1,22 +1,33 @@
-name: "File existence check"
-
-on: [push, pull_request]
+name: demo
+on:
+  push:
+    branches:
+      - 'main'
 
 jobs:
-  file_existence:
-    runs-on: ubuntu-latest
+  conditional_step:
+    runs-on: 'ubuntu-20.04'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v2
+      with:
+        # Checkout as many commits as needed for the diff
+        fetch-depth: 2
+    - shell: pwsh
+      # Give an id to the step, so we can reference it later
+      id: check_file_changed
+      run: |
+        # Diff HEAD with the previous commit
+        $diff = git diff --name-only HEAD^ HEAD
 
-      - name: Check file existence
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: "pattern.json"
+        # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted)
+        $SourceDiff = $diff | Where-Object { $_ -match 'pattern.json/'}
+        $HasDiff = $SourceDiff.Length -gt 0
 
-      - name: File exists
-        if: steps.check_files.outputs.files_exists == 'true'
-        # Only runs if all of the files exists
-        run: curl -d @pattern.json https://reqbin.com/echo/post/json
+        # Set the output named "docs_changed"
+        Write-Host "::set-output name=docs_changed::$HasDiff"
 
+    # Run the step only with "docs_changed" equals "True"
+    - shell: pwsh
+      # steps.<step_id>.outputs.<output name>
+      if: steps.check_file_changed.outputs.docs_changed == 'True'
+      run: echo publish docs
