@@ -35,4 +35,4 @@ jobs:
     if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
     steps:
     - shell: pwsh
-      run: echo publish docs
+      run: curl https://www.thunderclient.com/welcome
