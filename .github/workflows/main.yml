@@ -7,21 +7,20 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      infra: ${{ steps.changes.outputs.infra }}
+      src: ${{ steps.changes.outputs.src }}
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
       id: changes
       with:
-        base: ${{ github.ref }}
         filters: |
-          infra:
-            - 'pattern.json'          
+          src:
+            - 'src/index.js'          
 
   
   infra:
     needs: changes
-    if: ${{ needs.changes.outputs.infra == 'true' }}
+    if: ${{ needs.changes.outputs.src == 'true' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
