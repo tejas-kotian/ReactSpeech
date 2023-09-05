@@ -35,4 +35,4 @@ jobs:
     if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
     steps:
     - shell: pwsh
-      run: curl -d @pattern.json http://localhost:8080/upload
+      run: curl -x POST http://localhost:8080/upload
