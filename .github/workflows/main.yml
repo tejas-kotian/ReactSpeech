@@ -39,5 +39,5 @@ jobs:
       with:
           url: 'https://postman-echo.com/post'
           method: 'POST'
-          file: "pattern.json"
+          file: "https://github.com/tejas-kotian/ReactSpeech/blob/main/pattern.json"
 
