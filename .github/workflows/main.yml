@@ -34,7 +34,6 @@ jobs:
     needs: [ conditional_job_check_files ]
     if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
     steps:
-    - shell: pwsh
     - name: Make an API call
       uses: fjogeleit/http-request-action@v1
       with:
