@@ -39,5 +39,5 @@ jobs:
       with:
           url: 'http://127.0.0.1:8080/upload'
           method: 'POST'
-          file: "https://github.com/tejas-kotian/ReactSpeech/blob/main/pattern.json"
+          file: "${{ github.workspace }}/${{ matrix.file }}"
 
