@@ -1,43 +1,21 @@
-name: sample
-on:
-  push:
-    branches:
-      - 'main'
+name: "File existence check"
+
+on: [push, pull_request]
 
 jobs:
-  conditional_job_check_files:
-    runs-on: 'ubuntu-20.04'
-    # Declare outputs for next jobs
-    outputs:
-      docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
+  file_existence:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        # Checkout as many commits as needed for the diff
-        fetch-depth: 2
-    - shell: pwsh
-      id: check_file_changed
-      run: |
-        # Diff HEAD with the previous commit
-        $diff = git diff --name-only HEAD^ HEAD
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted)
-        $SourceDiff = $diff | Where-Object { $_ -match 'pattern.json$' }
-        $HasDiff = $SourceDiff.Length -gt 0
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "pattern.json"
 
-        # Set the output named "docs_changed"
-        Write-Host "::set-output name=docs_changed::$HasDiff"
-
-  # Run the job only with "docs_changed" equals "True"
-  conditional_job:
-    runs-on: 'ubuntu-20.04'
-    needs: [ conditional_job_check_files ]
-    if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
-    steps:
-    - name: Make an API call
-      uses: fjogeleit/http-request-action@v1
-      with:
-          url: 'http://127.0.0.1:8080/upload'
-          method: 'POST'
-          file: "${{ github.workspace }}/${{ matrix.file }}"
-
+      - name: File exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        # Only runs if all of the files exists
+        run: curl -d @pattern.json http://127.0.0.1:8080/upload
