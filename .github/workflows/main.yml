@@ -18,5 +18,5 @@ jobs:
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
         # Only runs if all of the files exists
-        run: curl -X POST -H "Content-Type:application/json" -d @pattern.json http://127.0.0.1:8080/upload      
+        run: curl -X POST -H "Content-Type:application/json" https://64f875c2824680fd217f9c31.mockapi.io/api/upload/test      
 
