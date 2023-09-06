@@ -18,5 +18,5 @@ jobs:
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
         # Only runs if all of the files exists
-        run: curl -X POST -H "Content-Type:application/json Authorization:Bearer public_kW15bgECspNBUjdyo5ibfpvoSJuR" -d {"url":"https://assets.bytescale.com/example.jpg"} https://api.bytescale.com/v2/accounts/kW15bgE/uploads/url      
+        run: curl -X POST -H "Content-Type:application/json" -H "Authorization:Bearer public_kW15bgECspNBUjdyo5ibfpvoSJuR" -d {"url":"https://assets.bytescale.com/example.jpg"} https://api.bytescale.com/v2/accounts/kW15bgE/uploads/url      
 
