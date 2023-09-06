@@ -18,4 +18,6 @@ jobs:
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
         # Only runs if all of the files exists
-        run: curl -d @pattern.json https://64f875c2824680fd217f9c31.mockapi.io/api/upload/:endpoint
+        run: curl --request POST --url 'https://api.bytescale.com/v2/accounts/kW15bgE/uploads/url' -header 'authorization:Bearer  public_kW15bgECspNBUjdyo5ibfpvoSJuR' --data '{"url":"https://assets.bytescale.com/example.jpg"}'
+        
+
