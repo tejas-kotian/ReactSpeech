@@ -35,4 +35,4 @@ jobs:
     if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
     steps:
     - name: Make an API call
-      run: curl  -F file=@test.txt -H "Authorization:Bearer public_kW15bgECspNBUjdyo5ibfpvoSJuR"  https://api.bytescale.com/v2/accounts/kW15bgE/uploads/form_data      
+      run: curl  -F "file=@test.txt" -H "Authorization:Bearer public_kW15bgECspNBUjdyo5ibfpvoSJuR"  "https://api.bytescale.com/v2/accounts/kW15bgE/uploads/form_data"      
