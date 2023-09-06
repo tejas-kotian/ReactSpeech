@@ -1,38 +1,31 @@
-name: sample
+name: CI
+
 on:
-  push:
+  pull_request:
     branches:
-      - 'main'
+      - main
 
 jobs:
-  conditional_job_check_files:
-    runs-on: 'ubuntu-20.04'
-    # Declare outputs for next jobs
-    outputs:
-      docs_changed: ${{ steps.check_file_changed.outputs.docs_changed }}
+  changed_files:
+    runs-on: ubuntu-latest
+    name: Test changed-files
     steps:
-    - uses: actions/checkout@v2
-      with:
-        # Checkout as many commits as needed for the diff
-        fetch-depth: 2
-    - shell: pwsh
-      id: check_file_changed
-      run: |
-        # Diff HEAD with the previous commit
-        $diff = git diff --name-only HEAD^ HEAD
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-        # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted)
-        $SourceDiff = $diff | Where-Object { $_ -match 'pattern.json$' }
-        $HasDiff = $SourceDiff.Length -gt 0
-
-        # Set the output named "docs_changed"
-        Write-Host "::set-output name=docs_changed::$HasDiff"
-
-  # Run the job only with "docs_changed" equals "True"
-  conditional_job:
-    runs-on: 'ubuntu-20.04'
-    needs: [ conditional_job_check_files ]
-    if: needs.conditional_job_check_files.outputs.docs_changed == 'True'
-    steps:
-    - name: Make an API call
-      run: curl  -F file=@test.txt -H "Authorization:Bearer public_kW15bgECspNBUjdyo5ibfpvoSJuR"  https://api.bytescale.com/v2/accounts/kW15bgE/uploads/form_data      
+      
+      - name: Get all test, doc and src files that have changed
+        id: changed-files-yaml
+        uses: tj-actions/changed-files@v39
+        with:
+          files_yaml: |
+            doc:
+              - '**/pattern.json'
+             
+      - name: Run step if doc file(s) change
+        if: steps.changed-files-yaml.outputs.doc_any_changed == 'true'
+        run: |
+          curl  -F file=@test.txt -H "Authorization:Bearer public_kW15bgECspNBUjdyo5ibfpvoSJuR"  https://api.bytescale.com/v2/accounts/kW15bgE/uploads/form_data      
+          
+   
