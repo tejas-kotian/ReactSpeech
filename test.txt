@@ -22,7 +22,7 @@
    "createdBy":"01/01/2022",
    "modifiedBy":"02/02/2022",
    "appName":"Platform",
-   "appID":"AP001",
-   "domain":"FIT",
+   "appID":"P001",
+   "domain":"test domain",
    "versionNo":"1.0.0"             
 }
